@@ -1,7 +1,11 @@
 package service;
 
+import com.opencsv.CSVReader;
 import model.Park;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,5 +35,25 @@ public class ParkService {
         list.add(cubs);
         list.add(ohio);
 
+    }
+
+    public static List<Park> makeListFromCSV(String filename) {
+        List<Park> list2 = null;
+        try {
+            CSVReader reader = new CSVReader(new FileReader(filename));
+
+            list2 = new ArrayList<>();
+            reader.readNext(); // skip the first line
+            String[] spl = null;
+            while ((spl = reader.readNext()) != null) {
+                list2.add(new Park(spl[0], spl[1], spl[2], spl[3], spl[4], spl[5]));
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return list2;
     }
 }
